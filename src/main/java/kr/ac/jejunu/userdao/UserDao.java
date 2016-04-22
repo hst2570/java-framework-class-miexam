@@ -2,13 +2,8 @@ package kr.ac.jejunu.userdao;
 
 import java.sql.*;
 
-public class UserDao {
+public abstract class UserDao {
     public User get(Long id) throws ClassNotFoundException, SQLException {
-        //데이터는어디에?   Mysql
-//        //Driver Class Load
-//        Class.forName("com.mysql.jdbc.Driver");
-//        // Connection    접속정보는? localhost jeju id : jeju pw: jejupw
-//        Connection connection = DriverManager.getConnection("jdbc:mysql://db.skyserv.kr/jejunu?characterEncoding=utf-8", "jeju", "jejupw");
         Connection connection = getConnection();
         // 쿼리만들고
         PreparedStatement preparedStatement = connection.prepareStatement("select * from userinfo where id = ?");
@@ -32,11 +27,6 @@ public class UserDao {
     }
 
     public Long add(User user) throws ClassNotFoundException, SQLException {
-        //데이터는어디에?   Mysql
-//        //Driver Class Load
-//        Class.forName("com.mysql.jdbc.Driver");
-//        // Connection    접속정보는? localhost jeju id : jeju pw: jejupw
-//        Connection connection = DriverManager.getConnection("jdbc:mysql://db.skyserv.kr/jejunu?characterEncoding=utf-8", "jeju", "jejupw");
         Connection connection = getConnection();
         // 쿼리만들고
         PreparedStatement preparedStatement = connection.prepareStatement("insert into userinfo (name, password) values (?,?)");
@@ -66,11 +56,12 @@ public class UserDao {
         return id;
     }
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        // Connection    접속정보는? localhost jeju id : jeju pw: jejupw
-        Connection connection = DriverManager.getConnection("jdbc:mysql://db.skyserv.kr/jejunu?characterEncoding=utf-8", "jeju", "jejupw");
-
-        return connection;
-    }
+    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+//    {
+//        Class.forName("com.mysql.jdbc.Driver");
+//        // Connection    접속정보는? localhost jeju id : jeju pw: jejupw
+//        Connection connection = DriverManager.getConnection("jdbc:mysql://db.skyserv.kr/jejunu?characterEncoding=utf-8", "jeju", "jejupw");
+//
+//        return connection;
+//    }
 }
