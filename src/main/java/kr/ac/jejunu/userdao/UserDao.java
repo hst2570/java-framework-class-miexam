@@ -5,13 +5,9 @@ import java.sql.*;
 public class UserDao {
     private ConnectionMaker connectionMaker;
 
-    public UserDao(ConnectionMaker connectionMaker){
+    public void setConnectionMaker(ConnectionMaker connectionMaker){
         this.connectionMaker = connectionMaker;
     }
-
-//    public void setConnectionMaker(ConnectionMaker connectionMaker){
-//        this.connectionMaker = connectionMaker;
-//    }
 
     public User get(Long id) throws ClassNotFoundException, SQLException {
         Connection connection = connectionMaker.getConnection();
