@@ -7,7 +7,7 @@ import java.sql.SQLException;
 /**
  * Created by user on 2016-04-22.
  */
-public class JejuConnection extends UserDao{
+public class SimpleConnectionMaker implements ConnectionMaker {
 
     @Override
     public Connection getConnection() throws ClassNotFoundException, SQLException {
