@@ -14,21 +14,25 @@ public class UserDao {
 
         MakeStrategyStatement getStrategyStatement = new getStrategyStatement(id);
         PreparedStatement preparedStatement = getStrategyStatement.StrategyStatement(connection);
+        ResultSet resultSet = null;
+        User user = null;
+        try {
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
 
-        // 실행
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        // 결과매핑
-        User user = new User();
+            user = new User();
 
-        user.setId(resultSet.getLong("id"));
-        user.setName(resultSet.getString("name"));
-        user.setPassword(resultSet.getString("password"));
-
+            user.setId(resultSet.getLong("id"));
+            user.setName(resultSet.getString("name"));
+            user.setPassword(resultSet.getString("password"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        }
         //자원을 해지한다.
-        resultSet.close();
-        preparedStatement.close();
-        connection.close();
 
         return user;
     }
@@ -39,12 +43,16 @@ public class UserDao {
         MakeStrategyStatement addStrategyStatement = new addStrategyStatement(user);
         PreparedStatement preparedStatement = addStrategyStatement.StrategyStatement(connection);
 
-        // 실행
-        preparedStatement.executeUpdate();
-        Long id = getLastInsertId(connection);
-
-        preparedStatement.close();
-        connection.close();
+        Long id = null;
+        try {
+            preparedStatement.executeUpdate();
+            id = getLastInsertId(connection);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            preparedStatement.close();
+            connection.close();
+        }
 
         return id;
     }
