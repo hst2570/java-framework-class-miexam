@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Bean;
  * Created by user on 2016-04-22.
  */
 public class DaoFactory {
-
-    @Bean
-    public UserDao getUserDao(){
-        return new UserDao(connectionMaker());
-    }
+//
+//    @Bean
+//    public UserDao getUserDao(){
+//        return new UserDao();
+//    }
 
     @Bean
     public ConnectionMaker connectionMaker(){
