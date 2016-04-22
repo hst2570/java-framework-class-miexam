@@ -16,23 +16,8 @@ public class UserDao {
         PreparedStatement preparedStatement = getStrategyStatement.StrategyStatement(connection);
         ResultSet resultSet = null;
         User user = null;
-        try {
-            resultSet = preparedStatement.executeQuery();
-            resultSet.next();
 
-            user = new User();
-
-            user.setId(resultSet.getLong("id"));
-            user.setName(resultSet.getString("name"));
-            user.setPassword(resultSet.getString("password"));
-        }catch (SQLException e){
-            e.printStackTrace();
-        }finally {
-            resultSet.close();
-            preparedStatement.close();
-            connection.close();
-        }
-        //자원을 해지한다.
+        getStrategyStatementBody(connection, user, preparedStatement, resultSet);
 
         return user;
     }
@@ -44,16 +29,8 @@ public class UserDao {
         PreparedStatement preparedStatement = addStrategyStatement.StrategyStatement(connection);
 
         Long id = null;
-        try {
-            preparedStatement.executeUpdate();
-            id = getLastInsertId(connection);
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            preparedStatement.close();
-            connection.close();
-        }
 
+        addStrategyStatementBody(connection, id, preparedStatement);
         return id;
     }
 
@@ -71,6 +48,37 @@ public class UserDao {
         PreparedStatement preparedStatement = updateStrategyStatement.StrategyStatement(connection);
 
         updateStategyStatementBody(connection, preparedStatement);
+    }
+
+    public void getStrategyStatementBody(Connection connection, User user, PreparedStatement preparedStatement, ResultSet resultSet) throws SQLException {
+        try {
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            user = new User();
+
+            user.setId(resultSet.getLong("id"));
+            user.setName(resultSet.getString("name"));
+            user.setPassword(resultSet.getString("password"));
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        }
+    }
+
+    public void addStrategyStatementBody(Connection connection, Long id, PreparedStatement preparedStatement) throws SQLException {
+        try {
+            preparedStatement.executeUpdate();
+            id = getLastInsertId(connection);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            preparedStatement.close();
+            connection.close();
+        }
     }
 
     private void updateStategyStatementBody(Connection connection, PreparedStatement preparedStatement) throws SQLException {
