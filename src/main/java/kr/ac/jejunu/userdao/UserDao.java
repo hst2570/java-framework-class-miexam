@@ -59,32 +59,21 @@ public class UserDao {
 
     public void delete(Long id) throws SQLException, ClassNotFoundException {
         Connection connection = connectionMaker.getConnection();
+        MakeStrategyStatement deleteStrategyStatement = new deleteStrategyStatement(id);
+        PreparedStatement preparedStatement = deleteStrategyStatement.StrategyStatement(connection);
 
-        String sql = "Delete from userinfo where id = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setLong(1, id);
-
-        try {
-
-            preparedStatement.executeUpdate();
-
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            preparedStatement.close();
-            connection.close();
-        }
+        updateStategyStatementBody(connection, preparedStatement);
     }
 
     public void update(User user) throws SQLException, ClassNotFoundException {
         Connection connection = connectionMaker.getConnection();
+        MakeStrategyStatement updateStrategyStatement = new updateStrategyStatement(user);
+        PreparedStatement preparedStatement = updateStrategyStatement.StrategyStatement(connection);
 
-        String sql = "update userinfo set name = ?, password = ? where id = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, user.getName());
-        preparedStatement.setString(2, user.getPassword());
-        preparedStatement.setLong(3, user.getId());
+        updateStategyStatementBody(connection, preparedStatement);
+    }
 
+    private void updateStategyStatementBody(Connection connection, PreparedStatement preparedStatement) throws SQLException {
         try {
             preparedStatement.executeUpdate();
         }catch (Exception e){
@@ -94,7 +83,6 @@ public class UserDao {
             connection.close();
         }
     }
-
 
     private Long getLastInsertId(Connection connection) throws ClassNotFoundException, SQLException{
         PreparedStatement preparedStatement2 = connection.prepareStatement("select last_insert_id()");
