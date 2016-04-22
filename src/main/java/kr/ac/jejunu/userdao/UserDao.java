@@ -25,7 +25,7 @@ public class UserDao {
             user.setId(resultSet.getLong("id"));
             user.setName(resultSet.getString("name"));
             user.setPassword(resultSet.getString("password"));
-        }catch (Exception e){
+        }catch (SQLException e){
             e.printStackTrace();
         }finally {
             resultSet.close();
@@ -56,6 +56,45 @@ public class UserDao {
 
         return id;
     }
+
+    public void delete(Long id) throws SQLException, ClassNotFoundException {
+        Connection connection = connectionMaker.getConnection();
+
+        String sql = "Delete from userinfo where id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setLong(1, id);
+
+        try {
+
+            preparedStatement.executeUpdate();
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            preparedStatement.close();
+            connection.close();
+        }
+    }
+
+    public void update(User user) throws SQLException, ClassNotFoundException {
+        Connection connection = connectionMaker.getConnection();
+
+        String sql = "update userinfo set name = ?, password = ? where id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, user.getName());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setLong(3, user.getId());
+
+        try {
+            preparedStatement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            preparedStatement.close();
+            connection.close();
+        }
+    }
+
 
     private Long getLastInsertId(Connection connection) throws ClassNotFoundException, SQLException{
         PreparedStatement preparedStatement2 = connection.prepareStatement("select last_insert_id()");
